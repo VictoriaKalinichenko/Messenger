@@ -55,6 +55,7 @@ namespace Messenger.UI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<MessengerHub>("/messengerHub");
