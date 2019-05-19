@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Messenger.BusinessLogic.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +37,15 @@ namespace Messenger.UI
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            //services.AddMvc().AddControllersAsServices();
+
             services.AddSignalR();
+
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new BusinessLogic.Config.AutofacConfig());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

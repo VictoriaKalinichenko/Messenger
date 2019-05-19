@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Messenger.UI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Messenger.BusinessLogic.Interfaces;
+using Messenger.Entity;
 
 namespace Messenger.UI.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IUserService _userService;
+
+        public HomeController (IUserService userService)
         {
+            _userService = userService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            List<User> users = await _userService.GetAll();
+
             return View();
         }
 
