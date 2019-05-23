@@ -14,21 +14,8 @@ namespace Messenger.UI.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly IUserService _userService;
 
-        public HomeController (IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            List<User> users = await _userService.GetAll();
-
-            return View();
-        }
-
-        public IActionResult Privacy()
+        public IActionResult Index()
         {
             return View();
         }
