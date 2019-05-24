@@ -5,9 +5,9 @@ namespace Messenger.BusinessLogic.Hubs
 {
     public class MessengerHub : Hub
     {
-        public async Task SendMessage(string userId, string message)
+        public async Task SendMessage(string sender, string receiver, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", userId, message);
+            await Clients.User(receiver).SendAsync("ReceiveMessage", sender, message);
         }
     }
 }
