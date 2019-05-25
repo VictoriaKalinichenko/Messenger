@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Messenger.DataAccess.Interfaces
+namespace Messenger.BusinessLogic.Interfaces
 {
-    public interface IMessageRepository
+    public interface IMessageService
     {
         Task<List<Message>> GetList(string senderId, string receiverId);
-        Task Insert(Message message);
     }
 }

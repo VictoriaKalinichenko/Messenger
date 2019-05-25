@@ -7,23 +7,33 @@ using System.Threading.Tasks;
 
 namespace Messenger.UI.Controllers
 {
-  [Route("api/[controller]/[action]")]
-  [Authorize]
-  [ApiController]
-  public class UserController : ControllerBase
-  {
-    private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
+    [Route("api/[controller]/[action]")]
+    [Authorize]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-      _userService = userService;
-    }
+        private readonly IUserService _userService;
+        private readonly IMessageService _messageService;
 
-    [HttpGet]
-    public async Task<IActionResult> GetList ()
-    {
-      List<User> users = await _userService.GetAll();
-      return Ok(users);
+        public UserController(IUserService userService, IMessageService messageService)
+        {
+            _userService = userService;
+            _messageService = messageService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList()
+        {
+            string currentUserName = HttpContext.User.Identity.Name;
+            List<User> users = await _userService.GetAll(currentUserName);
+            return Ok(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessageList(string senderId, string receiverId)
+        {
+            List<Message> messages = await _messageService.GetList(senderId, receiverId);
+            return Ok(messages);
+        }
     }
-  }
 }

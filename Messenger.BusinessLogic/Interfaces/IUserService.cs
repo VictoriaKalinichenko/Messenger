@@ -8,6 +8,7 @@ namespace Messenger.BusinessLogic.Interfaces
 {
     public interface IUserService
     {
-        Task<List<User>> GetAll();
+        Task<List<User>> GetAll(string currentUserName);
+        Task<string> GetIdByName(string name);
     }
 }

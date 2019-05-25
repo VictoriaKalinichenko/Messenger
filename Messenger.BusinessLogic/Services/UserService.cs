@@ -1,9 +1,8 @@
 ﻿using Messenger.BusinessLogic.Interfaces;
 using Messenger.DataAccess.Interfaces;
 using Messenger.Entity;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Messenger.BusinessLogic.Services
@@ -17,10 +16,18 @@ namespace Messenger.BusinessLogic.Services
             _userRepository = userRepository;
         }
 
-        public async Task<List<User>> GetAll()
+        public async Task<List<User>> GetAll(string currentUserName)
         {
             List<User> users = await _userRepository.GetAll();
+            users.Remove(users.Where(m => m.UserName == currentUserName).First());
             return users;
         }
+
+        public async Task<string> GetIdByName(string name)
+        {
+            string userId = await _userRepository.GetIdByName(name);
+            return userId;
+        }
+
     }
 }

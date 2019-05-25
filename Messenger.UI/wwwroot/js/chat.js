@@ -1,29 +1,50 @@
 ﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/messengerHub").build();
+var connectionEstablished = false;
 
-//Disable send button until connection is established
-document.getElementById("sendButton").disabled = true;
+connection.on("ReceiveMessage", function (userId, message) {
 
-connection.on("ReceiveMessage", function (user, message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg = user + " says " + msg;
-    var li = document.createElement("li");
-    li.textContent = encodedMsg;
-    document.getElementById("messageList").appendChild(li);
+    if (receiverId == userId) {
+        removeEmptyItem();
+
+        var text = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var shownMessage = "<strong>" + receiverName + "</strong>: " + text;
+        $('#messageList').append("<li class='w-100'><div class='row col-sm-12'><p class='w-100 mb-1 word-break'>" + shownMessage + "</p></div></li>");
+    }
+
+    updateScroll();
 });
 
 connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
+    connectionEstablished = true;
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
-    var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", user, message).catch(function (err) {
-        return console.error(err.toString());
+
+    var text = document.getElementById("messageInput").value.trim();
+    if (!text) {
+        return;
+    }
+
+    if (!connectionEstablished) {
+        swal("Error", "Connection is not established");
+        return;
+    }
+
+    connection.invoke("SendMessage", senderId, receiverId, text).catch(function (error) {
+        swal("Error", error.toString());
+        return;
     });
+
+    $("#messageInput").val('');
+    removeEmptyItem();
+
+    var shownMessage = "<strong>You</strong>: " + text;
+    $('#messageList').append("<li class='w-100'><div class='row col-sm-12'><p class='w-100 mb-1 word-break'>" + shownMessage + "</p></div></li>");
+
+    updateScroll();
     event.preventDefault();
 });

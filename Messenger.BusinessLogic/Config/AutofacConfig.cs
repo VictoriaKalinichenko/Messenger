@@ -9,6 +9,7 @@ namespace Messenger.BusinessLogic.Config
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<MessageService>().As<IMessageService>();
 
             builder.RegisterModule(new DataAccess.Config.AutofacConfig());
             base.Load(builder);

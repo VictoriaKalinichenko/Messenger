@@ -10,6 +10,9 @@ namespace Messenger.DataAccess.Config
         {
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>();
+            
+            builder.RegisterType<MessageRepository>()
+                .As<IMessageRepository>();
 
             base.Load(builder);
         }
